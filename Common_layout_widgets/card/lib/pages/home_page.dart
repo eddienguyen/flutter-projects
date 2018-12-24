@@ -3,17 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:card/fragments/icon_card.dart';
 import 'package:card/fragments/image_card.dart';
 
-class drawerItem {
+class DrawerItem {
   final IconData icon;
   final String name;
 
-  drawerItem({this.icon, this.name});
+  DrawerItem({this.icon, this.name});
 }
 
 class HomePage extends StatefulWidget {
-  var drawerItems = [
-    new drawerItem(icon: Icons.card_giftcard, name: 'icon card'),
-    new drawerItem(icon: Icons.card_membership, name: 'image card'),
+  final drawerItems = [
+    new DrawerItem(icon: Icons.card_giftcard, name: 'icon card'),
+    new DrawerItem(icon: Icons.card_membership, name: 'image card'),
   ];
 
   HomePage({Key key}) : super(key: key);
