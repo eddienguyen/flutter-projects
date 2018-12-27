@@ -5,16 +5,48 @@ void main() => runApp(MyApp());
 // Favorite Widget includes a star and a text
 class FavoriteWidget extends StatefulWidget {
   @override
-    _FavoriteWidgetState createState() => _FavoriteWidgetState();
-  
+  _FavoriteWidgetState createState() => _FavoriteWidgetState();
 }
 
 class _FavoriteWidgetState extends State<FavoriteWidget> {
+  bool _isFavorited = true;
+  int _favoriteCount = 41;
+
+  void _toggleFavorite() {
+    setState(() {
+      if (_isFavorited) {
+        _isFavorited = false;
+        _favoriteCount--;
+      } else {
+        _isFavorited = true;
+        _favoriteCount++;
+      }
+    });
+  }
+
   @override
-    Widget build(BuildContext context) {
-      // TODO: implement build
-      return null;
-    }
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        Container(
+          padding: EdgeInsets.all(0.0),
+          child: IconButton(
+            icon: _isFavorited ? Icon(Icons.star) : Icon(Icons.star_border),
+            color: Colors.red[500],
+            onPressed: _toggleFavorite,
+          ),
+        ),
+        SizedBox(
+          width: 18.0,
+          child: Text('$_favoriteCount',
+              style: TextStyle(fontWeight: FontWeight.w500)),
+        ),
+      ],
+    );
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -46,11 +78,7 @@ class MyApp extends StatelessWidget {
             )
           ],
         )),
-        Icon(
-          Icons.star,
-          color: Colors.red[500],
-        ),
-        Text('41')
+        FavoriteWidget()
       ]),
     );
 
