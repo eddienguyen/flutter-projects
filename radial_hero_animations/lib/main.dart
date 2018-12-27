@@ -1,111 +1,171 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart' show timeDilation;
+import 'dart:math' as math;
 
-void main() => runApp(MyApp());
+class Photo extends StatelessWidget {
+  Photo({Key key, this.photoSrc, this.color, this.onTap}) : super(key: key);
 
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+  final String photoSrc;
+  final Color color;
+  final VoidCallback onTap;
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
+    return Material(
+      color: Theme.of(context).primaryColor.withOpacity(0.25),
+      child: InkWell(
+        onTap: onTap,
+        child: LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints size) {
+            return Image.asset(
+              photoSrc,
+              fit: BoxFit.contain,
+            );
+          },
+        ),
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+class RadialExpansion extends StatelessWidget {
+  RadialExpansion({Key key, this.maxRadius, this.child})
+      : clipRectSize = 2.0 * maxRadius / math.sqrt2,
+        super(key: key);
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
+  final double maxRadius;
+  final clipRectSize;
+  final Widget child;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  Widget build(BuildContext context) {
+    return ClipOval(
+      child: Center(
+        child: SizedBox(
+          width: clipRectSize,
+          height: clipRectSize,
+          child: ClipRect(
+            child: child,
+          ),
+        ),
+      ),
+    );
+  }
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class RadialExpansionDemo extends StatelessWidget {
+  static const double kMinRadius = 32.0;
+  static const double kMaxRadius = 128.0;
+  static const opacityCurve =
+      const Interval(0.0, 0.75, curve: Curves.fastOutSlowIn);
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
+  static RectTween _createRectTween(Rect begin, Rect end) {
+    return MaterialRectCenterArcTween(begin: begin, end: end);
+  }
+
+  static Widget _buildPage(
+      BuildContext context, String imageName, String description) {
+    return Container(
+      color: Theme.of(context).canvasColor,
+      child: Center(
+        child: Card(
+          elevation: 8.0,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(5.0))),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              SizedBox(
+                width: kMaxRadius * 2.0,
+                height: kMaxRadius * 2.0,
+                child: Hero(
+                  tag: imageName,
+                  createRectTween: _createRectTween,
+                  child: RadialExpansion(
+                    maxRadius: kMaxRadius,
+                    child: Photo(
+                      photoSrc: imageName,
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ),
+                ),
+              ),
+              Text(
+                description,
+                style: TextStyle(fontWeight: FontWeight.bold),
+                textScaleFactor: 2.0,
+              ),
+              const SizedBox(
+                height: 16.0,
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHero(
+      BuildContext context, String imageName, String description) {
+    return Container(
+      width: kMinRadius * 2.0,
+      height: kMinRadius * 2.0,
+      child: Hero(
+        tag: imageName,
+        createRectTween: _createRectTween,
+        child: RadialExpansion(
+          maxRadius: kMaxRadius,
+          child: Photo(
+            photoSrc: imageName,
+            onTap: () {
+              Navigator.of(context).push(PageRouteBuilder<void>(pageBuilder:
+                  (BuildContext context, Animation<double> animation,
+                      Animation<double> secondaryAnimation) {
+                return AnimatedBuilder(
+                  animation: animation,
+                  builder: (BuildContext context, Widget child) {
+                    return Opacity(
+                      opacity: opacityCurve.transform(animation.value),
+                      child: _buildPage(context, imageName, description),
+                    );
+                  },
+                );
+              }));
+            },
+          ),
+        ),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
+    timeDilation = 1.5;
+
     return Scaffold(
       appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+        title: Text('Radial hero animation'),
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
+      body: Container(
+        alignment: FractionalOffset.bottomCenter,
+        padding: const EdgeInsets.all(10.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.display1,
-            ),
+            _buildHero(context, 'assets/images/tubinno1.jpg', 'image 1'),
+            _buildHero(context, 'assets/images/tubinno2.jpg', 'image 2'),
+            _buildHero(context, 'assets/images/tubinno3.jpg', 'image 3'),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
+}
+
+void main() {
+  runApp(MaterialApp(
+    home: RadialExpansionDemo(),
+  ));
 }
