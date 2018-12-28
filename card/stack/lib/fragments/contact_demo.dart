@@ -159,9 +159,9 @@ class _ContactDemoState extends State<ContactDemo> {
                     const DecoratedBox(
                       decoration: BoxDecoration(
                           gradient: LinearGradient(
-                            begin: Alignment(0.0, -1.0),
-                            end: Alignment(0.0, -0.4),
-                            colors: <Color>[Color(0x60000000), Color(0x00000000)],
+                        begin: Alignment(0.0, -1.0),
+                        end: Alignment(0.0, -0.4),
+                        colors: <Color>[Color(0x60000000), Color(0x00000000)],
                       )),
                     ),
                   ],
