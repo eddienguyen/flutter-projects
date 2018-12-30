@@ -9,6 +9,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
+<<<<<<< HEAD
         // This is the theme of your application.
         //
         // Try running your application with "flutter run". You'll see the
@@ -18,6 +19,9 @@ class MyApp extends StatelessWidget {
         // or simply save your changes to "hot reload" in a Flutter IDE).
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted.
+=======
+   
+>>>>>>> c8c0d6c985cd2979c1000df9e9a54cb57550bd40
         primarySwatch: Colors.blue,
       ),
       home: MyHomePage(title: 'Flutter Demo Home Page'),
@@ -28,6 +32,7 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
 
+<<<<<<< HEAD
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
   // how it looks.
@@ -36,6 +41,9 @@ class MyHomePage extends StatefulWidget {
   // case the title) provided by the parent (in this case the App widget) and
   // used by the build method of the State. Fields in a Widget subclass are
   // always marked "final".
+=======
+ 
+>>>>>>> c8c0d6c985cd2979c1000df9e9a54cb57550bd40
 
   final String title;
 
@@ -46,6 +54,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
+<<<<<<< HEAD
   void _incrementCounter() {
     setState(() {
       // This call to setState tells the Flutter framework that something has
@@ -65,6 +74,17 @@ class _MyHomePageState extends State<MyHomePage> {
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
+=======
+  void _decrementCounter() {
+    setState(() {
+      
+      _counter--;
+    });
+  }
+  @override
+  Widget build(BuildContext context) {
+  
+>>>>>>> c8c0d6c985cd2979c1000df9e9a54cb57550bd40
     return Scaffold(
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
@@ -72,6 +92,7 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: Center(
+<<<<<<< HEAD
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
         child: Column(
@@ -89,6 +110,10 @@ class _MyHomePageState extends State<MyHomePage> {
           // center the children vertically; the main axis here is the vertical
           // axis because Columns are vertical (the cross axis would be
           // horizontal).
+=======
+        child: Column(
+
+>>>>>>> c8c0d6c985cd2979c1000df9e9a54cb57550bd40
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
@@ -102,10 +127,17 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
+<<<<<<< HEAD
         onPressed: _incrementCounter,
         tooltip: 'Increment',
         child: Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
+=======
+        onPressed: _decrementCounter,
+        tooltip: 'Decrement',
+        child: Icon(Icons.add),
+      ), 
+>>>>>>> c8c0d6c985cd2979c1000df9e9a54cb57550bd40
     );
   }
 }
