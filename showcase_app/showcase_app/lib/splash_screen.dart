@@ -25,7 +25,7 @@ class StaggerAnimation extends StatelessWidget {
         super(key: key);
 
   final Animation<double> controller;
-  Animation<double> logoFade;
+  final Animation<double> logoFade;
   Animation<double> scaleDown;
   Animation<Offset> slideUp;
   Animation<double> fade;

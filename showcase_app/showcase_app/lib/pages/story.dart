@@ -10,9 +10,9 @@ class _StoryPageState extends State<StoryPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.lightBlueAccent,
+      color: Colors.indigoAccent,
       child: Center(
-        child: Text('this is StoryPage'),
+        child: Text('this is StoryPage', style: Theme.of(context).textTheme.title,),
       ),
     );
   }

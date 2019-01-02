@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:showcase_app/config/screens.dart';
 import 'package:showcase_app/widgets/bottom_navigation.dart';
+import 'package:showcase_app/widgets/bottom_navigation_button.dart';
 
 // pages
 import 'pages/about.dart';
@@ -17,6 +18,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  int _currentPageIndex = 0;
   PageController pageController;
 
   List<String> keys;
@@ -24,7 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    pageController = PageController();
+    pageController = PageController(initialPage: _currentPageIndex);
 
     keys = [
       PAGES.about,
@@ -41,16 +43,21 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     Widget content = PageView(
+      onPageChanged: (int newPageIndex) {
+        setState(() {
+          _currentPageIndex = newPageIndex;
+        });
+      },
       controller: pageController,
       children: <Widget>[
         AboutPage(
           key: Key(PAGES.about),
         ),
-        DiscoverPage(
-          key: Key(PAGES.discover),
-        ),
         StorePage(
           key: Key(PAGES.store),
+        ),
+        DiscoverPage(
+          key: Key(PAGES.discover),
         ),
         StoryPage(
           key: Key(PAGES.story),
@@ -67,9 +74,30 @@ class _HomeScreenState extends State<HomeScreen> {
           Positioned(
             bottom: 0,
             child: BottomNavigation(
-              onPressed: (id) {
-                jumpToPage(id);
-              }
+              // onPressed: (id) {
+              //   jumpToPage(id);
+              // },
+              currentIndex: _currentPageIndex,
+              onTap: (int index) {
+                setState(() {
+                  _currentPageIndex = index;
+                  jumpToPage(index);
+                });
+              },
+              items: [
+                new BottomNavigationButton(
+                  label: 'about.',
+                ),
+                new BottomNavigationButton(
+                  label: 'store.',
+                ),
+                new BottomNavigationButton(
+                  label: 'discover.',
+                ),
+                new BottomNavigationButton(
+                  label: 'story.',
+                ),
+              ],
             ),
           ),
         ],
