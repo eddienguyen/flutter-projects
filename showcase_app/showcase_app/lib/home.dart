@@ -36,18 +36,30 @@ class _HomeScreenState extends State<HomeScreen> {
     ];
   }
 
-  void jumpToPage(int index) {
-    pageController.jumpToPage(index);
+  @override
+  void dispose() {
+    super.dispose();
+    pageController.dispose();
+  }
+
+  void onPageChanged(int newPageIndex) async {
+    setState(() {
+      _currentPageIndex = newPageIndex;
+    });
+  }
+
+  void onBottomNavigationTapped(int pageIndex) async {
+    await pageController.animateToPage(pageIndex,
+        duration: Duration(milliseconds: 300), curve: Curves.easeInOut);
+    setState(() {
+      _currentPageIndex = pageIndex;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     Widget content = PageView(
-      onPageChanged: (int newPageIndex) {
-        setState(() {
-          _currentPageIndex = newPageIndex;
-        });
-      },
+      onPageChanged: onPageChanged,
       controller: pageController,
       children: <Widget>[
         AboutPage(
@@ -74,16 +86,8 @@ class _HomeScreenState extends State<HomeScreen> {
           Positioned(
             bottom: 0,
             child: BottomNavigation(
-              // onPressed: (id) {
-              //   jumpToPage(id);
-              // },
               currentIndex: _currentPageIndex,
-              onTap: (int index) {
-                setState(() {
-                  _currentPageIndex = index;
-                  jumpToPage(index);
-                });
-              },
+              onTap: onBottomNavigationTapped,
               items: [
                 new BottomNavigationButton(
                   label: 'about.',

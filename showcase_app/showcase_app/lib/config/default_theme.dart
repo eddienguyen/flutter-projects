@@ -13,6 +13,7 @@ class DefaultTheme {
         textTheme: originalTextTheme.copyWith(
             body1: TextStyle(
               fontFamily: 'Gotham',
+              color: Color(0xFF1E1E1E)
             ),
             title: TextStyle(
                 fontFamily: 'Gotham', color: Colors.black, fontSize: 32)),
@@ -31,8 +32,19 @@ class DefaultTheme {
   static get dark {
     final originalTextTheme = ThemeData.dark().textTheme;
     return ThemeData.dark().copyWith(
-      backgroundColor: Color(0xFF1E1E1E),
-      textTheme: originalTextTheme.copyWith(),
+      primaryColor: Color(0xFF2A2A2A),
+      primaryColorDark: Color(0xFF1E1E1E) ,
+      primaryColorLight: Colors.white,
+      accentColor: Color(0xFFED1C24),
+      backgroundColor: Colors.black,
+      textTheme: originalTextTheme.copyWith(
+        title: TextStyle(
+          fontFamily: 'Gotham',
+          fontSize: 32,
+          color: Colors.white
+        )
+      ),
+      
     );
   }
 }

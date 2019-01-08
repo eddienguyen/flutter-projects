@@ -35,10 +35,13 @@ class StaggerAnimation extends StatelessWidget {
       opacity: logoFade,
       child: ScaleTransition(
         scale: scaleDown,
-        child: Image.asset(
-          'assets/images/logo-c2a.png',
-          width: 60.0,
-          height: 60.0,
+        child: Hero(
+          tag: 'logoC2A',
+          child: Image.asset(
+            'assets/images/logo-c2a.png',
+            width: 60.0,
+            height: 60.0,
+          ),
         ),
       ),
     );

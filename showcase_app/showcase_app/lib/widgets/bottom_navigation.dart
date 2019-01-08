@@ -54,24 +54,19 @@ class _BottomNavigationState extends State<BottomNavigation> {
   }
 
   List<Widget> _createButtons() {
-    final List<BottomNavigationButton> children = <BottomNavigationButton>[];
+    final List<Widget> children = <Widget>[];
     for (int i = 0; i < widget.items.length; i++) {
-      children.add(BottomNavigationButton(
-        label: widget.items[i].label,
-        active: i == widget.currentIndex,
-        // onChanged: _handleItemChanged,
-        onTap: () {
-          if (widget.onTap != null) {
-            widget.onTap(i);
-          }
-        },
-        // onTap: () {
-        //   if (widget.onTap != null) {
-        //     widget.onTap(i);
-        //     setState(() {});
-        //   }
-        // }
-      ));
+      children.add(
+        BottomNavigationButton(
+          label: widget.items[i].label,
+          active: i == widget.currentIndex,
+          onTap: () {
+            if (widget.onTap != null) {
+              widget.onTap(i);
+            }
+          },
+        ),
+      );
     }
     return children;
   }
@@ -81,35 +76,12 @@ class _BottomNavigationState extends State<BottomNavigation> {
     return Container(
       width: MediaQuery.of(context).size.width,
       color: Theme.of(context).bottomAppBarColor.withOpacity(0.5),
-      padding: EdgeInsets.all(20.0),
+      padding: const EdgeInsets.symmetric(horizontal: 10.0),
       child: Row(
         mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.end,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: _createButtons(),
-        //  <Widget>[
-        //   // => replace with createButtons()
-        //   BottomNavigationButton(
-        //     label: 'about.',
-        //     active: false,
-        //     onChanged: _handleItemChanged,
-        //   ),
-        //   BottomNavigationButton(
-        //     label: 'store.',
-        //     active: false,
-        //     onChanged: _handleItemChanged,
-        //   ),
-        //   BottomNavigationButton(
-        //     label: 'discover.',
-        //     active: false,
-        //     onChanged: _handleItemChanged,
-        //   ),
-        //   BottomNavigationButton(
-        //     label: 'story.',
-        //     active: true,
-        //     onChanged: _handleItemChanged,
-        //   )
-        // ],
       ),
     );
   }

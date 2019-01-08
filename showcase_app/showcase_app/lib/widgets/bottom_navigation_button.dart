@@ -14,19 +14,23 @@ class BottomNavigationButton extends StatelessWidget {
   final bool active;
   final VoidCallback onTap;
 
-  // void _handleTap() {
-  //   onChanged(!active);
-  //   onTap();
-  // }
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Text(
-        label.toUpperCase(),
-        style: Theme.of(context).textTheme.title.copyWith(
-            color: active ? Colors.yellow : Colors.white,
-            fontSize: active ? 18 : 16),
+      behavior: HitTestBehavior.opaque,
+      child: SafeArea(
+        bottom: true,
+        top: false,
+        child: Container(
+          padding: const EdgeInsets.only(top: 20.0),
+          child: Text(
+            label.toUpperCase(),
+            style: Theme.of(context).textTheme.title.copyWith(
+                color: active ? Colors.yellow : Colors.white,
+                fontSize: active ? 18 : 16),
+          ),
+        ),
       ),
     );
   }
