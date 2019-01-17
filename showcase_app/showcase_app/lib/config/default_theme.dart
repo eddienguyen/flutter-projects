@@ -36,6 +36,7 @@ class DefaultTheme {
       primaryColorDark: Color(0xFF1E1E1E) ,
       primaryColorLight: Colors.white,
       accentColor: Color(0xFFED1C24),
+      highlightColor: Colors.yellow,
       backgroundColor: Colors.black,
       textTheme: originalTextTheme.copyWith(
         title: TextStyle(

@@ -23,11 +23,11 @@ class BottomNavigationButton extends StatelessWidget {
         bottom: true,
         top: false,
         child: Container(
-          padding: const EdgeInsets.only(top: 20.0),
+          padding: const EdgeInsets.symmetric(vertical: 10.0),
           child: Text(
             label.toUpperCase(),
             style: Theme.of(context).textTheme.title.copyWith(
-                color: active ? Colors.yellow : Colors.white,
+                color: active ? Theme.of(context).highlightColor : Colors.white,
                 fontSize: active ? 18 : 16),
           ),
         ),

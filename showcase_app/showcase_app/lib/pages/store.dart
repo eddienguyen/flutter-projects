@@ -12,7 +12,7 @@ class _StorePageState extends State<StorePage> {
     return Container(
       color: Colors.grey,
       child: Center(
-        child: Text('this is StorePage', style: Theme.of(context).textTheme.body1),
+        child: Text('Store Page', style: Theme.of(context).textTheme.body1),
       ),
     );
   }

@@ -4,6 +4,7 @@ import 'package:showcase_app/widgets/drawer_panel.dart';
 
 class AboutPage extends StatefulWidget {
   AboutPage({Key key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
     return _AboutPageState();
@@ -12,10 +13,30 @@ class AboutPage extends StatefulWidget {
 
 class _AboutPageState extends State<AboutPage> {
   bool isSearching = false;
-  DrawerPanel drawer;
+  bool isShowPanel = false;
+  Widget drawer;
+
+  void showDrawerPanel() {
+    if (mounted) {
+      setState(() {
+        isShowPanel = true;
+      });
+    }
+  }
+
+  void hideDrawerPanel() {
+    if (mounted) {
+      setState(() {
+        isShowPanel = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData mediaQueryData = MediaQuery.of(context);
+    double screenWidth = mediaQueryData.size.width;
+    double screenHeight = mediaQueryData.size.height;
     // search
     IconButton searchAction = isSearching
         ? IconButton(
@@ -41,7 +62,9 @@ class _AboutPageState extends State<AboutPage> {
     IconButton menuIcon = IconButton(
       icon: Icon(Icons.menu),
       color: Theme.of(context).primaryColor,
-      onPressed: () {},
+      onPressed: () {
+        showDrawerPanel();
+      },
     );
 
     // SearchField || Logo
@@ -53,99 +76,47 @@ class _AboutPageState extends State<AboutPage> {
                     Icon(Icons.search, color: Theme.of(context).primaryColor),
                 hintText: 'search'),
           )
-        : Hero(
-            tag: 'logoC2A',
-            child: Image.asset(
-              'assets/images/logo-c2a.png',
-              width: 60,
-              height: 60,
+        : Center(
+            child: Hero(
+              tag: 'logoC2A',
+              child: Image.asset(
+                'assets/images/logo-c2a.png',
+                width: 60,
+                height: 60,
+              ),
             ),
           );
 
-    drawer = DrawerPanel();
+    drawer = DrawerPanel(shouldShow: isShowPanel);
 
     return Stack(
       children: <Widget>[
-        SafeArea(
-          child: drawer,
-        ),
-        SafeArea(
-          child: CustomScrollView(
-            slivers: <Widget>[
-              SliverAppBar(
-                snap: true,
-                floating: true,
-                backgroundColor: Colors.transparent,
-                title: headerTitle,
-                leading: menuIcon,
-                actions: <Widget>[searchAction],
-              ),
-              SliverList(
-                delegate: SliverChildListDelegate(<Widget>[
-                  Text('..'),
-                  Text('..'),
-                  Text('..'),
-                  Text('..'),
-                  Text('..'),
-                  Text('..'),
-                  Text('..'),
-                  Text('..'),
-                  Text('..'),
-                  Text('..'),
-                  Text('..'),
-                  Text('..'),
-                  Text('..'),
-                  Text('..'),
-                  Text('..'),
-                  Text('..'),
-                  Text('..'),
-                  Text('..'),
-                  Text('..'),
-                  Text('..'),
-                  Text('..'),
-                  Text('..'),
-                  Text('..'),
-                  Text('..'),
-                  Text('..'),
-                  Text('..'),
-                  Text('..'),
-                  Text('..'),
-                  Text('..'),
-                  Text('..'),
-                  Text('..'),
-                  Text('..'),
-                  Text('..'),
-                  Text('..'),
-                  Text('..'),
-                  Text('..'),
-                  Text('..'),
-                  Text('..'),
-                  Text('..'),
-                  Text('..'),
-                  Text('..'),
-                  Text('..'),
-                  Text('..'),
-                  Text('..'),
-                  Text('..'),
-                  Text('..'),
-                  Text('..'),
-                  Text('..'),
-                  Text('..'),
-                  Text('..'),
-                  Text('..'),
-                  Text('..'),
-                  Text('..'),
-                  Text('..'),
-                  Text('..'),
-                  Text('..'),
-                  Text('..'),
-                  Text('..'),
-                  Text('..'),
-                  Text('..'),
-                ]),
-              ),
-            ],
+        Container(
+          child: SafeArea(
+            child: CustomScrollView(
+              slivers: <Widget>[
+                SliverAppBar(
+                  snap: true,
+                  floating: true,
+                  backgroundColor: Colors.transparent,
+                  title: headerTitle,
+                  leading: menuIcon,
+                  actions: <Widget>[searchAction],
+                ),
+                SliverList(
+                  delegate: SliverChildListDelegate(<Widget>[
+                    // banner
+                    Container(
+
+                    )
+                  ]),
+                ),
+              ],
+            ),
           ),
+        ),
+        Positioned(
+          child: drawer,
         ),
       ],
     );
