@@ -26,7 +26,9 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    pageController = PageController(initialPage: _currentPageIndex);
+    pageController = PageController(
+      initialPage: _currentPageIndex,
+    );
 
     keys = [
       PAGES.about,
@@ -58,6 +60,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // temp
+
+
+
+    //temp
+
     Widget content = PageView(
       onPageChanged: onPageChanged,
       controller: pageController,

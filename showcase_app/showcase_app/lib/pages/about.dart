@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:showcase_app/widgets/about_header.dart';
 import 'package:showcase_app/widgets/drawer_panel.dart';
+import 'package:showcase_app/widgets/image_holder.dart';
 
 class AboutPage extends StatefulWidget {
   AboutPage({Key key}) : super(key: key);
@@ -15,6 +17,12 @@ class _AboutPageState extends State<AboutPage> {
   bool isSearching = false;
   bool isShowPanel = false;
   Widget drawer;
+
+  List<String> imageUrls = [
+    'assets/images/demo/8.jpg',
+    'assets/images/demo/9.jpg',
+    'assets/images/demo/10.jpg',
+  ];
 
   void showDrawerPanel() {
     if (mounted) {
@@ -94,6 +102,7 @@ class _AboutPageState extends State<AboutPage> {
         Container(
           child: SafeArea(
             child: CustomScrollView(
+              scrollDirection: Axis.vertical,
               slivers: <Widget>[
                 SliverAppBar(
                   snap: true,
@@ -107,7 +116,28 @@ class _AboutPageState extends State<AboutPage> {
                   delegate: SliverChildListDelegate(<Widget>[
                     // banner
                     Container(
-
+                      padding: const EdgeInsets.symmetric(vertical: 10.0),
+                      child: new CarouselSlider(
+                        items: imageUrls.map((url) {
+                          return new Builder(
+                            builder: (BuildContext context) {
+                              return new Container(
+                                width: screenWidth,
+//                                margin: EdgeInsets.symmetric(horizontal: 5.0),
+                                decoration: BoxDecoration(
+                                    color: Theme.of(context).primaryColorDark),
+                                child: new ImageHolder(
+                                  url: url,
+                                  height: 200.0,
+                                ),
+                              );
+                            },
+                          );
+                        }).toList(),
+                        viewportFraction: 1.0,
+                        height: 200.0,
+                        autoPlay: true,
+                      ),
                     )
                   ]),
                 ),
