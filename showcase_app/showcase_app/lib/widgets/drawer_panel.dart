@@ -150,6 +150,6 @@ class _DrawerPanelState extends State<DrawerPanel>
       ),
     );
 
-    return widget.shouldShow ? drawer : Container();
+    return widget.shouldShow ? drawer : Offstage();
   }
 }

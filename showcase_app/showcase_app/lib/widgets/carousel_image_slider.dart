@@ -16,10 +16,29 @@ class _CarouselImageSliderState extends State<CarouselImageSlider> {
   final _controller = new PageController();
   int _current = 0;
 
-  void onPageChanged(int newPageIndex) async {
+  void onPageChanged(int newPageIndex) {
     setState(() {
       _current = newPageIndex;
 //      print(_controller.initialPage);
+    });
+  }
+
+  void previousImage() {
+    if (_current <= 0) return;
+    setState(() {
+      _current = _current - 1;
+      _controller.animateToPage(_current,
+          duration: Duration(milliseconds: 200), curve: Curves.easeInOut);
+    });
+  }
+
+  void nextImage() {
+    if (_current >= widget.list.length - 1) return;
+
+    setState(() {
+      _current = _current + 1;
+      _controller.animateToPage(_current,
+          duration: Duration(milliseconds: 200), curve: Curves.easeInOut);
     });
   }
 
@@ -42,14 +61,37 @@ class _CarouselImageSliderState extends State<CarouselImageSlider> {
               );
             }),
         // the buttons
-
+        Positioned(
+          child: Center(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                // Previous
+                FlatButton(
+                  child: Icon(Icons.navigate_before),
+                  padding: EdgeInsets.zero,
+                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  onPressed: previousImage,
+                ),
+                // Next
+                FlatButton(
+                  child: Icon(Icons.navigate_next),
+                  padding: EdgeInsets.zero,
+                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  onPressed: nextImage,
+                )
+              ],
+            ),
+          ),
+        ),
         // the indicators
         widget.hasIndicator
             ? DotIndicator(
                 list: widget.list,
                 controller: _controller,
               )
-            : Container(),
+            : IgnorePointer(),
       ],
     );
   }
