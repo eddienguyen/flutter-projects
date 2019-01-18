@@ -85,7 +85,7 @@ class StaggerAnimation extends StatelessWidget {
                           RaisedButton(
                         child: Text('Home'),
                         onPressed: () {
-                          Navigator.of(context).pushNamed(SCREEN.home);
+                          Navigator.of(context).pushNamedAndRemoveUntil(SCREEN.home, (Route<dynamic> route) => false);
                         },
                       ),
                     ),

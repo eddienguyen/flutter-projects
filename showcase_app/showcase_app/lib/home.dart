@@ -60,11 +60,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // temp
-
-
-
-    //temp
 
     Widget content = PageView(
       onPageChanged: onPageChanged,
