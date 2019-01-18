@@ -29,39 +29,45 @@ class MyApp extends StatelessWidget {
                 children: <Widget>[
                   Container(
                     margin: EdgeInsets.only(top: 20.0),
-                    child: CustomScrollView(
-                      scrollDirection: Axis.vertical,
-                      slivers: <Widget>[
-                        SliverAppBar(
-                          snap: true,
-                          floating: true,
-                          title: Text('custom scroll view'),
-                        ),
-                        SliverList(
-                          delegate: SliverChildListDelegate([
-                            Container(
-                              height: 300.0,
-                              padding: const EdgeInsets.all(10.0),
-                              child: Stack(
-                                children: <Widget>[
-                                  new ListView.builder(
-                                    itemCount: 10,
-                                    scrollDirection: Axis.horizontal,
-                                    itemBuilder: (BuildContext context, int index) {
-                                      return Container(
-                                        height: 200.0,
-                                        width: MediaQuery.of(context).size.width,
-                                        color: Colors.grey[300],
-                                        child: Text('List item'),
-                                      );
-                                    },
-                                  )
-                                ],
-                              ),
-                            )
-                          ]),
-                        ),
-                      ],
+                    child: SafeArea(
+                      child: CustomScrollView(
+                        scrollDirection: Axis.vertical,
+                        slivers: <Widget>[
+                          SliverAppBar(
+                            snap: true,
+                            floating: true,
+                            title: Text('custom scroll view'),
+                          ),
+                          SliverList(
+                            delegate: SliverChildListDelegate([
+                              Container(
+                                height: 300.0,
+                                padding: const EdgeInsets.all(10.0),
+                                child: Stack(
+                                  children: <Widget>[
+                                    new ListView.builder(
+                                      physics:
+                                          new AlwaysScrollableScrollPhysics(),
+                                      itemCount: 10,
+                                      scrollDirection: Axis.horizontal,
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
+                                        return Container(
+                                          height: 200.0,
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                          color: Colors.grey[300],
+                                          child: Text('List item'),
+                                        );
+                                      },
+                                    )
+                                  ],
+                                ),
+                              )
+                            ]),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],

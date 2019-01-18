@@ -4,8 +4,9 @@ enum _PanelAnimationStatus { open, closed, animating }
 
 class DrawerPanel extends StatefulWidget {
   final bool shouldShow;
+  final VoidCallback onHideCompleted;
 
-  DrawerPanel({Key key, this.shouldShow}) : super(key: key);
+  DrawerPanel({Key key, this.shouldShow, this.onHideCompleted}) : super(key: key);
 
   @override
   _DrawerPanelState createState() => _DrawerPanelState();
@@ -54,6 +55,9 @@ class _DrawerPanelState extends State<DrawerPanel>
           /// When the animation is at the beginning, the menu is closed
           ///
           animationStatus = _PanelAnimationStatus.closed;
+          if(widget.onHideCompleted != null) {
+            widget.onHideCompleted();
+          }
         } else {
           // is animating
           animationStatus = _PanelAnimationStatus.animating;
@@ -95,7 +99,7 @@ class _DrawerPanelState extends State<DrawerPanel>
     double screenWidth = mediaQueryData.size.width;
     double offsetWidth = -(screenWidth * 0.5);
 
-    Widget container = Container(
+    Widget drawer = Positioned(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
@@ -146,6 +150,6 @@ class _DrawerPanelState extends State<DrawerPanel>
       ),
     );
 
-    return container;
+    return widget.shouldShow ? drawer : Container();
   }
 }

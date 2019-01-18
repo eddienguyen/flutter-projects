@@ -94,7 +94,11 @@ class _AboutPageState extends State<AboutPage> {
             ),
           );
 
-    drawer = DrawerPanel(shouldShow: isShowPanel);
+    drawer = DrawerPanel(
+        shouldShow: isShowPanel,
+        onHideCompleted: () {
+          hideDrawerPanel();
+        });
 
     return Stack(
       children: <Widget>[
@@ -113,22 +117,20 @@ class _AboutPageState extends State<AboutPage> {
                 ),
                 SliverList(
                     delegate: SliverChildListDelegate([
-                      Container(
-                        height: 300,
-                        padding: const EdgeInsets.all(10.0),
-                        child: CarouselImageSlider(
-                          list: imageUrls,
-                        ),
-                      ),
-                    ])
-                ),
+                  Container(
+                    height: 200,
+                    padding: const EdgeInsets.symmetric(vertical: 10.0),
+                    child: CarouselImageSlider(
+                      list: imageUrls,
+                      hasIndicator: true,
+                    ),
+                  ),
+                ])),
               ],
             ),
           ),
         ),
-        Positioned(
-          child: drawer,
-        ),
+        drawer,
       ],
     );
   }
