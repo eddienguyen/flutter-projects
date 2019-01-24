@@ -24,13 +24,13 @@ class Style {
 
   static final regularTextStyle = baseTextStyle.copyWith(
     color: Color(0xFFB6B2DF),
-    fontSize: 9.0,
+    fontSize: 11.0,
     fontWeight: FontWeight.w400,
   );
 
   static final movieTitleTextStyle = regularTextStyle.copyWith(
     color: Colors.white,
-    fontSize: 16.0,
+    fontSize: 18.0,
     fontWeight: FontWeight.w700
   );
 }

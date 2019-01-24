@@ -12,7 +12,6 @@ class ItemModel {
 
     List<_Result> temp = [];
     for (int i = 0; i < parsedJson['results'].length; i++) {
-      if (i == 0) print(parsedJson['results'][i]['vote_average'] is double);
       _Result result = _Result(parsedJson['results'][i]);
       temp.add(result);
     }

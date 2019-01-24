@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:movie_db/src/blocs/movies_bloc.dart';
 import 'package:movie_db/src/models/item_model.dart';
 import 'package:movie_db/src/ui/gradient_appbar.dart';
+import 'package:movie_db/src/ui/movie_detail.dart';
 import 'package:movie_db/src/ui/movie_summary.dart';
 import 'package:movie_db/src/ui/theme.dart' as Theme;
 
@@ -22,8 +23,8 @@ class PopularMovieListState extends State<PopularMovieList> {
 
   @override
   void dispose() {
-    super.dispose();
     bloc.dispose();
+    super.dispose();
   }
 
   @override
@@ -50,13 +51,16 @@ class PopularMovieListState extends State<PopularMovieList> {
                           delegate:
                               SliverChildBuilderDelegate((context, index) {
                             var movie = snapshot.data.results[index];
-                            return new MovieSummary(
-                                movie.vote_count,
-                                movie.id,
-                                movie.vote_average,
-                                movie.title,
-                                movie.popularity,
-                                movie.poster_path);
+                            return InkResponse(
+                              child: new MovieSummary(
+                                  movie.id,
+                                  movie.vote_count,
+                                  movie.vote_average,
+                                  movie.title,
+                                  movie.popularity,
+                                  movie.poster_path),
+                              onTap: () => openDetailPage(snapshot.data, index),
+                            );
                           }, childCount: snapshot.data.results.length),
                         )
                       ],
@@ -73,5 +77,22 @@ class PopularMovieListState extends State<PopularMovieList> {
         ],
       ),
     );
+  }
+
+  openDetailPage(ItemModel data, int index) {
+    var movie = data.results[index];
+    Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return MovieDetail(
+        id: movie.id,
+        title: movie.title,
+        vote_count: movie.vote_count,
+        vote_average: movie.vote_average,
+        popularity: movie.popularity,
+        poster_path: movie.poster_path,
+        backdrop_path: movie.backdrop_path,
+        overview: movie.overview,
+        release_date: movie.release_date,
+      );
+    }));
   }
 }
