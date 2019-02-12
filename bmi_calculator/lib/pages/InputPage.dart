@@ -14,7 +14,7 @@ class InputPage extends StatelessWidget {
         left: 24.0,
         top: screenAwareSize(56.0, context),
       ),
-      child: Text('BMI Calculator',
+      child: Text('BMIC',
           style: new TextStyle(fontSize: 28.0, fontWeight: FontWeight.bold)),
     );
   }
