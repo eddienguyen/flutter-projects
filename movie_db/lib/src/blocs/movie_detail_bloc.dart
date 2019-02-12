@@ -17,8 +17,8 @@ class MovieDetailBloc {
   final _movieId = PublishSubject<int>();
   final _trailers = BehaviorSubject<Future<TrailerModel>>();
 
-  Function(int) get fetchTraiersById => _movieId.sink.add;
-  Observable<Future<TrailerModel>> get movieTraiers => _trailers.stream;
+  Function(int) get fetchTrailersById => _movieId.sink.add;
+  Observable<Future<TrailerModel>> get movieTrailers => _trailers.stream;
 
   MovieDetailBloc() {
     _movieId.stream.transform(_itemTransformer()).pipe(_trailers);

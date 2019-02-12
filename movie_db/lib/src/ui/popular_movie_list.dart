@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movie_db/src/blocs/movie_detail_bloc_provider.dart';
 
 import 'package:movie_db/src/blocs/movies_bloc.dart';
 import 'package:movie_db/src/models/item_model.dart';
@@ -82,16 +83,18 @@ class PopularMovieListState extends State<PopularMovieList> {
   openDetailPage(ItemModel data, int index) {
     var movie = data.results[index];
     Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return MovieDetail(
-        id: movie.id,
-        title: movie.title,
-        vote_count: movie.vote_count,
-        vote_average: movie.vote_average,
-        popularity: movie.popularity,
-        poster_path: movie.poster_path,
-        backdrop_path: movie.backdrop_path,
-        overview: movie.overview,
-        release_date: movie.release_date,
+      return MovieDetailBlocProvider(
+        child: MovieDetail(
+          id: movie.id,
+          title: movie.title,
+          vote_count: movie.vote_count,
+          vote_average: movie.vote_average,
+          popularity: movie.popularity,
+          poster_path: movie.poster_path,
+          backdrop_path: movie.backdrop_path,
+          overview: movie.overview,
+          release_date: movie.release_date,
+        ),
       );
     }));
   }
