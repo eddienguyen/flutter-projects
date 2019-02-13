@@ -1,3 +1,4 @@
+import 'package:bmi_calculator/widgets/height_card.dart';
 import 'package:flutter/material.dart';
 
 import '../config/widget_utils.dart' show screenAwareSize;
@@ -53,7 +54,8 @@ class InputPage extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: _tempCard('Height'),
+            child: HeightCard(),
+            //TODO: add height picker
           )
         ],
       ),

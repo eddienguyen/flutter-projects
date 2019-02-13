@@ -45,7 +45,7 @@ class _GenderCardState extends State<GenderCard>
         child: SizedBox(
       width: double.infinity,
       child: Padding(
-        padding: EdgeInsets.only(top: screenAwareSize(8.0, context)),
+        padding: EdgeInsets.only(top: screenAwareSize(16.0, context)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
