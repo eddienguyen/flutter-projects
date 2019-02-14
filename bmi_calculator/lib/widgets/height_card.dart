@@ -1,31 +1,23 @@
 import 'package:flutter/material.dart';
+import 'dart:math' as math;
 import 'package:bmi_calculator/config/widget_utils.dart';
-import 'package:bmi_calculator/config/height_card_styles.dart';
+import 'package:bmi_calculator/theme/height_card_styles.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'card_title.dart';
-import 'package:flutter/material.dart';
 
-class HeightCard extends StatefulWidget {
+class HeightCard extends StatelessWidget {
   final int height;
 
-  const HeightCard({Key key, this.height}) : super(key: key);
-  @override
-  _HeightCardState createState() => _HeightCardState();
-}
+  final ValueChanged<int> onChange;
 
-class _HeightCardState extends State<HeightCard> {
-  int height;
-
-  @override
-  void initState() {
-    super.initState();
-    height = widget.height ?? 140;
-  }
+  const HeightCard({Key key, this.height = 150, this.onChange})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Card(
       child: Padding(
-        padding: EdgeInsets.only(top: screenAwareSize(16.0, context)),
+        padding: EdgeInsets.only(top: screenAwareSize(8.0, context)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
@@ -45,7 +37,7 @@ class _HeightCardState extends State<HeightCard> {
                     // get the widget's height:
                     widgetHeight: constraints.maxHeight,
                     height: height,
-                    onChange: (newHeight) => setState(() => height = newHeight),
+                    onChange: (newHeight) => onChange(newHeight),
                   );
                 }),
               ),
@@ -118,14 +110,6 @@ class _HeightPickerState extends State<HeightPicker> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    // Stack will be handy later on when we will have more widgets to display
-    return Stack(
-      children: <Widget>[_drawLabels(), _drawSlider()],
-    );
-  }
-
   /// displaying labels on the right. We want them to be evenly distributed and to display
   /// values from 'minHeight' to 'maxHeight' and incremented by 5
   Widget _drawLabels() {
@@ -159,6 +143,81 @@ class _HeightPickerState extends State<HeightPicker> {
         ),
       ),
     );
+  }
+
+  /// Add a person image that will scale with the slider. When we can calculate the position of the slider(below),
+  /// all we need to do is draw an svg image with the height equals to slider position plus bottom margin. Then align the image to the bottom.
+  Widget _drawPersonImage() {
+    double personImageHeight = _sliderPosition + marginBottomAdapted(context);
+
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: SvgPicture.asset(
+        'assets/images/person.svg',
+        height: personImageHeight,
+        width: personImageHeight / 4,
+      ),
+    );
+  }
+
+  /// add Gesture: taps - because 'onTap' event of GestureDetector doesn't provide information about the position of the event.
+  /// So using onTapDown which provides GestureTapDownDetails.
+  @override
+  Widget build(BuildContext context) {
+    // Stack will be handy later on when we will have more widgets to display
+    return GestureDetector(
+      // HitTestBehavior.translucent so height will be increase on tap down,
+      // without it , height can only be decrease on tap down
+      behavior: HitTestBehavior.translucent,
+      onTapDown: _onTapDown,
+      onVerticalDragStart: _onDragStart,
+      onVerticalDragUpdate: _onDragUpdate,
+      child: Stack(
+        children: <Widget>[_drawPersonImage(), _drawLabels(), _drawSlider()],
+      ),
+    );
+  }
+
+  // Handling vertical drags. We'll use 2 callbacks from the gesture detector
+  _onDragStart(DragStartDetails dragStartDetails) {
+    // when the drag starts, update the new height and save that height
+    // and y-offset in HeightPicker, because when the drag updates, check the difference between the start offset saved on start
+    // and the update offset.
+    // Then calculate the new height and update by widget.onChange method
+    int newHeight = _globalOffsetToHeight(dragStartDetails.globalPosition);
+    widget.onChange(_normalizeHeight(newHeight));
+  }
+
+  _onDragUpdate(DragUpdateDetails dragUpdateDetails) {
+    int newHeight = _globalOffsetToHeight(dragUpdateDetails.globalPosition);
+    widget.onChange(_normalizeHeight(newHeight));
+  }
+
+  _onTapDown(TapDownDetails tapDownDetails) {
+    int height = _globalOffsetToHeight(tapDownDetails.globalPosition);
+    widget.onChange(_normalizeHeight(height));
+  }
+
+  /// normalize the obtained value, so th
+  int _normalizeHeight(int height) {
+    return math.max(widget.minHeight, math.min(widget.maxHeight, height));
+  }
+
+  int _globalOffsetToHeight(Offset globalOffset) {
+    // take the RenderBox from context
+    RenderBox getBox = context.findRenderObject();
+    // get the global position of tapDownDetails and parse global position to a local one
+    Offset localPosition = getBox.globalToLocal(globalOffset);
+    // take the y component of the offset. Remember that it is increasing down the screen (top = 0.0)
+    double dy = localPosition.dy;
+    // since this localPosition is connected from the HeightPicker widget, should subtract top margin and half of the label size.
+    // this way max height value (ie. 190) can be the reference point.
+    dy = dy - marginTopAdapted(context) - labelsFontSize / 2;
+    // Divide the number of pixels from the top by the number of pixels per unit,
+    // so that we have the number of units from the top,
+    // then subtract the units from the top from the maximum height
+    int height = widget.maxHeight - (dy ~/ _pixelsPerUnits);
+    return height;
   }
 }
 

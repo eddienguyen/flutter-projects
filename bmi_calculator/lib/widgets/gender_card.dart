@@ -8,9 +8,12 @@ import 'package:bmi_calculator/config/widget_utils.dart' show screenAwareSize;
 double _circleSize(BuildContext context) => screenAwareSize(80.0, context);
 
 class GenderCard extends StatefulWidget {
-  final Gender initialGender;
+  final Gender gender;
 
-  const GenderCard({Key key, this.initialGender}) : super(key: key);
+  final ValueChanged<Gender> onChange;
+
+  const GenderCard({Key key, this.gender = Gender.other, this.onChange})
+      : super(key: key);
 
   _GenderCardState createState() => _GenderCardState();
 }
@@ -23,7 +26,7 @@ class _GenderCardState extends State<GenderCard>
   @override
   void initState() {
     // Conditional expression: expr1 ?? expr2 -> If expr1 is non-null, returns its value; otherwise, evaluate and returns the value of expr2.
-    selectedGender = widget.initialGender ?? Gender.other;
+    selectedGender = widget.gender ?? Gender.other;
     _arrowAnimationController = new AnimationController(
       vsync: this,
       lowerBound: -_defaultGenderAngle,
@@ -45,13 +48,13 @@ class _GenderCardState extends State<GenderCard>
         child: SizedBox(
       width: double.infinity,
       child: Padding(
-        padding: EdgeInsets.only(top: screenAwareSize(16.0, context)),
+        padding: EdgeInsets.only(top: screenAwareSize(8.0, context)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             CardTitle("Gender"),
             Padding(
-              padding: EdgeInsets.only(top: screenAwareSize(16.0, context)),
+              padding: EdgeInsets.only(top: screenAwareSize(8.0, context)),
               child: _drawMainStack(),
             )
           ],
@@ -69,12 +72,15 @@ class _GenderCardState extends State<GenderCard>
           _drawCircleIndicator(),
           GenderIconTranslated(
             gender: Gender.female,
+            isSelected: selectedGender == Gender.female,
           ),
           GenderIconTranslated(
             gender: Gender.male,
+            isSelected: selectedGender == Gender.male,
           ),
           GenderIconTranslated(
             gender: Gender.other,
+            isSelected: selectedGender == Gender.other,
           ),
           _drawGestureDetector()
         ],
@@ -105,7 +111,10 @@ class _GenderCardState extends State<GenderCard>
   }
 
   void _setSelectedGender(Gender gender) {
-    setState(() => selectedGender = gender);
+    setState(() {
+      selectedGender = gender;
+      widget.onChange(selectedGender);
+    });
     _arrowAnimationController.animateTo(_genderAngles[gender],
         duration: Duration(milliseconds: 100));
   }
@@ -163,10 +172,12 @@ class GenderIconTranslated extends StatelessWidget {
   };
 
   final Gender gender;
+  final bool isSelected;
 
   bool get _isOtherGender => gender == Gender.other;
 
-  const GenderIconTranslated({Key key, this.gender}) : super(key: key);
+  const GenderIconTranslated({Key key, this.gender, this.isSelected})
+      : super(key: key);
 
   String get _assetName => _genderImages[gender];
 
@@ -190,6 +201,7 @@ class GenderIconTranslated extends StatelessWidget {
       padding: EdgeInsets.only(left: _genderLeftPadding(context)),
       child: SvgPicture.asset(
         _assetName,
+        color: isSelected ? null : Colors.grey,
         height: _iconSize(context),
         width: _iconSize(context),
       ),

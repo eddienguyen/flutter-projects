@@ -1,3 +1,4 @@
+import 'package:bmi_calculator/config/widget_utils.dart';
 import 'package:flutter/material.dart';
 
 /// For A Card that use title and a subtitle, with unit displayed,
@@ -9,17 +10,35 @@ class CardTitle extends StatelessWidget {
 
   CardTitle(this.title, {Key key, this.subtitle}) : super(key: key);
 
+  // build a column with 2 elements: a Row and a divider.
+  // the Row consists 2 texts with different styles
   @override
   Widget build(BuildContext context) {
-    return RichText(
-      text: TextSpan(
-          text: title.toUpperCase(),
-          style: _titleStyle,
-          children: <TextSpan>[
-            TextSpan(
-                text: subtitle != null ? subtitle.toUpperCase() : "",
-                style: _subtitleStyle)
-          ]),
+    return Column(
+      children: <Widget>[
+        Padding(
+          padding: EdgeInsets.all(
+            screenAwareSize(8.0, context),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(
+                title.toUpperCase(),
+                style: _titleStyle,
+              ),
+              Text(
+                subtitle != null ? subtitle.toUpperCase() : "",
+                style: _subtitleStyle,
+              )
+            ],
+          ),
+        ),
+        Divider(
+          height: 1.0,
+          color: Color.fromRGBO(143, 144, 156, 0.22),
+        ),
+      ],
     );
   }
 }

@@ -5,20 +5,12 @@ import 'dart:math' as math;
 import 'package:bmi_calculator/config/widget_utils.dart' show screenAwareSize;
 import 'package:bmi_calculator/widgets/card_title.dart';
 
-class WeightCard extends StatefulWidget {
-  final int initialWeight;
-  const WeightCard({Key key, this.initialWeight}) : super(key: key);
-  _WeightCardState createState() => _WeightCardState();
-}
+class WeightCard extends StatelessWidget {
+  final int weight;
+  final ValueChanged<int> onChange;
 
-class _WeightCardState extends State<WeightCard> {
-  int weight;
-
-  @override
-  void initState() {
-    weight = widget.initialWeight ?? 70;
-    super.initState();
-  }
+  const WeightCard({Key key, this.weight = 70, this.onChange})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +50,7 @@ class _WeightCardState extends State<WeightCard> {
                 minValue: 30,
                 maxValue: 110,
                 value: weight,
-                onChanged: (newWeight) => setState(() => weight = newWeight),
+                onChanged: (newWeight) => onChange(newWeight),
                 width: constraints.maxWidth,
               );
       }),
