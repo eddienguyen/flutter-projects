@@ -1,0 +1,1 @@
+enum PageType { input, result }

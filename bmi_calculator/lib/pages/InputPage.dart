@@ -1,22 +1,50 @@
+import 'package:bmi_calculator/pages/ResultPage.dart';
+import 'package:bmi_calculator/theme/page_styles.dart';
+import 'package:bmi_calculator/widgets/bmi_app_bar.dart';
 import 'package:bmi_calculator/widgets/pacman_slider.dart';
+import 'package:bmi_calculator/widgets/transition_dot.dart';
 import 'package:flutter/material.dart';
 
 import '../config/widget_utils.dart' show screenAwareSize;
-import 'package:bmi_calculator/theme/input_page_styles.dart';
 import 'package:bmi_calculator/models/gender.dart';
 import 'package:bmi_calculator/widgets/gender_card.dart';
 import 'package:bmi_calculator/widgets/weight_card.dart';
 import 'package:bmi_calculator/widgets/height_card.dart';
+import 'package:bmi_calculator/models/pageType.dart';
+import 'FadeRoute.dart';
 
 class InputPage extends StatefulWidget {
   @override
-  _InputPageState createState() => _InputPageState();
+  _InputPageState createState() {
+    return new _InputPageState();
+  }
 }
 
-class _InputPageState extends State<InputPage> {
+class _InputPageState extends State<InputPage> with TickerProviderStateMixin {
   Gender gender = Gender.other;
   int weight = 70;
   int height = 170;
+  AnimationController _submitAnimationController;
+
+  @override
+  initState() {
+    super.initState();
+    _submitAnimationController =
+        AnimationController(vsync: this, duration: Duration(seconds: 2));
+    _submitAnimationController.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        _goToResultPage().then((_) => _submitAnimationController
+                .reset() // reset controller when coming back
+            );
+      }
+    });
+  }
+
+  @override
+  dispose() {
+    _submitAnimationController.dispose();
+    super.dispose();
+  }
 
   // We will wrap everything in MediaQuery.padding so that we are sure the view will not overlap with platform UI elements(smarter: use SafeArea instead).
   // The title and bottom button will take 'fixed' amount of space and then the input cards will take the rest(Expanded) in the middle
@@ -45,7 +73,8 @@ class _InputPageState extends State<InputPage> {
       //   color: Theme.of(context).primaryColor,
       // ),
       child: PacmanSlider(
-        
+        onSubmit: _onPacmanSubmit,
+        submitAnimationController: _submitAnimationController,
       ),
     );
   }
@@ -102,97 +131,44 @@ class _InputPageState extends State<InputPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      // because material's AppBar is smaller than the design, create own appbar
-      // to do that, need to pass 'PrefferedSizeWidget'
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(appBarHeight(context)),
-        child: BmiAppBar(),
-      ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          // _buildTitle(context),  <--- switch to custom appbar
-          InputSummaryCard(
-            gender: gender,
-            weight: weight,
-            height: height,
+    // Move the dots(when done slider animation) to the middle of the screen:
+    // - Create a Widget that will cover the whole Scaffold after the slider finishes its animation.
+    return Stack(children: [
+      Scaffold(
+        // because material's AppBar is smaller than the design, create own appbar
+        // to do that, need to pass 'PrefferedSizeWidget'
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(appBarHeight(context)),
+          child: BmiAppBar(
+            pageType: PageType.input,
           ),
-          Expanded(child: _buildCards(context)),
-          _buildBottom(context)
-        ],
-      ),
-    );
-  }
-}
-
-/// AppBar's content is a 'Row' packed into a 'Padding' and contains 2 elements: the label && the icon.
-class BmiAppBar extends StatelessWidget {
-  /// paste the Unicode emoji: https://unicode.org/emoji/charts/full-emoji-list.html
-  /// in the texts, only use 4-digit => split one 5-digit symbol into 4-digit ones: http://www.russellcottrell.com/greek/utilities/SurrogatePairCalculator.htm
-  static const String wavingHandEmoji = "\uD83D\uDC4B";
-  static const String whiteSkinTone = "\uD83C\uDFFB";
-
-  String getEmoji(BuildContext context) {
-    return Theme.of(context).platform == TargetPlatform.iOS
-        ? wavingHandEmoji
-        : wavingHandEmoji + whiteSkinTone;
-  }
-
-  Padding _buildIcon(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(bottom: screenAwareSize(11.0, context)),
-      child: Container(
-        width: screenAwareSize(20.0, context),
-        height: screenAwareSize(20.0, context),
-        // using 'Placeholder' instead of icon until get an actual icon
-        child: Placeholder(
-          color: Theme.of(context).primaryColor,
         ),
-      ),
-    );
-  }
-
-  RichText _buildLabel(BuildContext context) {
-    // emoji will disappear when using bold font weight => use RichText and apply bold weight only to the text.
-    return RichText(
-      text: TextSpan(
-          style: DefaultTextStyle.of(context).style.copyWith(fontSize: 34.0),
-          children: [
-            TextSpan(
-                text: 'BmiC'.toUpperCase(),
-                style: TextStyle(fontWeight: FontWeight.bold)),
-            // space
-            TextSpan(
-              text: ' ',
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            // _buildTitle(context),  <--- switch to custom appbar
+            InputSummaryCard(
+              gender: gender,
+              weight: weight,
+              height: height,
             ),
-            // TextSpan(text: getEmoji(context)) //<-- https://github.com/flutter/flutter/issues/9652
-            TextSpan(text: wavingHandEmoji)
-          ]),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // using 'Material' in order to add 'elevation'
-    return Material(
-      elevation: 2.0,
-      child: Container(
-        height: appBarHeight(context),
-        color: Colors.white,
-        child: Padding(
-          padding: EdgeInsets.all(screenAwareSize(16.0, context)),
-          child: new Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              _buildLabel(context),
-              _buildIcon(context),
-            ],
-          ),
+            Expanded(child: _buildCards(context)),
+            _buildBottom(context)
+          ],
         ),
       ),
-    );
+      TransitionDot(animation: _submitAnimationController),
+    ]);
+  }
+
+  void _onPacmanSubmit() {
+    _submitAnimationController.forward();
+  }
+
+  _goToResultPage() async {
+    return Navigator.of(context).push(FadeRoute(
+        builder: (context) =>
+            ResultPage(weight: weight, height: height, gender: gender)));
   }
 }
 
@@ -242,11 +218,11 @@ class InputSummaryCard extends StatelessWidget {
             ),
             _divider(),
             Expanded(
-              child: _text("${weight}(kg)"),
+              child: _text("$weight(kg)"),
             ),
             _divider(),
             Expanded(
-              child: _text("${height}(cm)"),
+              child: _text("$height(cm)"),
             ),
           ],
         ),

@@ -23,6 +23,7 @@ class SinusoildalAnimation extends Animatable<double> {
   const SinusoildalAnimation({this.min, this.max});
   @override
   double transform(double t) {
+    // provide sinusoidal behavior of the value
     return min + (max - min) * math.sin(math.pi * t);
   }
 }
