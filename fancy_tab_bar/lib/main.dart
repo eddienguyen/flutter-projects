@@ -1,3 +1,6 @@
+/// Reference on js : https://jsfiddle.net/andeh/64hmjy1q/
+/// github sc: https://github.com/tunitowen/tab_bar_animation/blob/master/lib
+
 import 'package:fancy_tab_bar/widgets/fancy_tab_bar.dart';
 import 'package:flutter/material.dart';
 
