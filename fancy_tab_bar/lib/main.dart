@@ -1,3 +1,4 @@
+import 'package:fancy_tab_bar/theme/page_styles.dart';
 /// Reference on js : https://jsfiddle.net/andeh/64hmjy1q/
 /// github sc: https://github.com/tunitowen/tab_bar_animation/blob/master/lib
 
@@ -24,8 +25,10 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+      backgroundColor: Colors.grey.shade300,
       appBar: AppBar(
         title: Text('Bottom Tab Bar'),
+        backgroundColor: PURPLE,
       ),
       bottomNavigationBar: FancyTabBar(),
       body: new Container(
