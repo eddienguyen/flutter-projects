@@ -1,0 +1,26 @@
+{
+    "id": 1,
+    "name": "My First Crossword",
+    "across": [
+        {
+            "number": 1,
+            "word": "TEL"
+        },
+        {
+            "number": 2,
+            "word": "AVB"
+        },
+        {
+            "number": 3,
+            "word": "SES"
+        },
+        {
+            "number": 4,
+            "word": "SAF"
+        },
+        {
+            "number": 5,
+            "word": "AKS"
+        }
+    ]
+}

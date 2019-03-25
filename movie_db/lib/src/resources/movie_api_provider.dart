@@ -1,3 +1,4 @@
+import 'dart:async' show Future;
 import 'dart:convert';
 
 import 'package:http/http.dart' show Client;
@@ -11,7 +12,6 @@ class MovieApiProvider {
 
   Future<ItemModel> fetchPopularMovieList() async {
    
-
     final response = await client.get('$_baseUrl/popular?api_key=$_api_key');
 
     if (response.statusCode == 200) {
