@@ -1,7 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:shopping_cart/models/cart_model.dart';
+import 'package:shopping_cart/screens/cart.dart';
+import 'package:shopping_cart/screens/catalog.dart';
 import 'package:shopping_cart/widgets/appbar.dart';
+import 'package:scoped_model/scoped_model.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  final cart = CartModel();
+
+  // optionally connect [cart] with some database here.
+
+  runApp(ScopedModel<CartModel>(
+    /// <= "ScopedModel of CartModel"
+    model: cart,
+    child: MyApp(),
+  ));
+}
 
 class MyApp extends StatefulWidget {
   @override
@@ -12,15 +26,15 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
-      home: new Scaffold(
-        appBar: PreferredSize(
-          preferredSize: Size(double.infinity, 60.0),
-          child: MyAppBar(),
-        ),
-        body: new Center(
-          child: new Text("this is MyApp"),
-        ),
+      debugShowCheckedModeBanner: true,
+      theme: ThemeData(
+        primarySwatch: Colors.yellow
       ),
+      routes: {
+        '/' : (context) => MyCatalog(),
+        './cart': (context) => MyCart(),
+      },
+      initialRoute: '/',
     );
   }
 }
