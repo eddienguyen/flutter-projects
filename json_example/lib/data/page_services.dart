@@ -18,7 +18,7 @@ Future loadPage() async {
 
   /// deserializing the decoded json by calling the [Page.fromJson] method so we can now use Page object to access the entities
   Page page = Page.fromJson(jsonResponse);
-
+  return page;
   /// print to test
   // print(page.people[2].images[1].imageName);
 }
