@@ -1,28 +1,31 @@
 class Crossword {
   int id;
   String name;
-  List<Word> words = [];
+  List<Word> across = [];
 
   // Crossword(this.id, this.name, this.across);
 
   Crossword.fromJson(Map<String, dynamic> parsedJson) {
     id = parsedJson['id'];
     name = parsedJson['name'];
-    List<Word> temp = [];
-    parsedJson['across'].forEach((word) => temp.add(new Word(word)));
+    List<Word> words = [];
+    parsedJson['across'].forEach((word) => words.add(new Word(word)));
 
-    words = temp;
+    across = words;
   }
 }
 
 class Word {
-  int number;
-  String word;
+  int _number;
+  String _word;
 
   Word(word) {
-    number = word['number'];
-    word = word['word'];
+    _number = word['number'];
+    _word = word['word'];
   }
+
+  int get number => number;
+  String get word => _word;
 
   // Word(this.number, this.word);
 }

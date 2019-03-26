@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:json_example/data/page_services.dart';
+import 'package:json_example/data/photo_services.dart';
+
 import 'data/crossword_parser.dart';
 
 void main() {
   runApp(MyApp());
-  loadCrossword();
+  loadPage();
 }
 
 class MyApp extends StatelessWidget {

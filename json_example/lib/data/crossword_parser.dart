@@ -10,6 +10,7 @@ Future<String> _fetchCrosswordAsset() async {
 Future loadCrossword() async {
   String jsonCrossword = await _fetchCrosswordAsset();
   Crossword crossword = _parseJsonForCrossword(jsonCrossword);
+  // print(crossword.across[3].word); 
 }
 
 Crossword _parseJsonForCrossword(String jsonString) {
